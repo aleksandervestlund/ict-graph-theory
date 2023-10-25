@@ -9,7 +9,7 @@ class BarabasiAlbert(Graph):
         self.add_edges_from(g.edges)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     ba = BarabasiAlbert(100, 1)
     ba.draw()
     plt.show()
