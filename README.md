@@ -7,11 +7,11 @@ For å installere notebooks trenger du python3.
 Det er nødvendig med python og pip.
  * Install python: https://www.python.org/downloads/
  * Install pip: https://pip.pypa.io/en/stable/installing/
- * Install requirements: pip install -r requirements.txt
+ * Install requirements: pip3 install -r requirements.txt
 
 For å åpne jupyter notebooks:
  * Åpne terminal i øving2 mappen
- * Kjør kommando: python -m notebook
+ * Kjør kommando: python3 -m notebook
 
-Det er så bare å åpne Oving2.ipnb. 
-####Lykke til!
+Det er så bare å åpne Oving2.ipnb.
+#### Lykke til!
