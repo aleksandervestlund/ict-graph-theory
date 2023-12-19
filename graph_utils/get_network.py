@@ -1,4 +1,4 @@
-def get_network(seed=246):
+def get_network(seed: int = 246) -> str:
     with open(
         "graph_utils/real_graph_alternatives.txt", encoding="utf-8"
     ) as f:

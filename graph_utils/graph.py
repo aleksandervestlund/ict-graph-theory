@@ -1,16 +1,18 @@
-import random as rd
+from __future__ import annotations
 import copy
 import math
+import random
 import statistics
+
 import matplotlib.pyplot as plt
 import networkx as nx
 
 
 class Graph(nx.Graph):
-    def __init__(self, **attr):
+    def __init__(self, **attr) -> None:
         super().__init__(**attr)
         self.seed = (
-            rd.randint(0, 1000) if "seed" not in attr.keys() else attr["seed"]
+            random.randint(0, 1000) if "seed" not in attr else attr["seed"]
         )
         self.attackdict = {
             "degree": nx.degree_centrality,
@@ -18,7 +20,7 @@ class Graph(nx.Graph):
             "betweenness": nx.betweenness_centrality,
         }
 
-    def histogram(self) -> list:
+    def histogram(self):
         dist = nx.degree_histogram(self)
         y_values = []
         for i, elem in enumerate(dist):
@@ -43,57 +45,54 @@ class Graph(nx.Graph):
     def betweenness_centrality(self):
         return nx.betweenness_centrality(self)
 
-    def draw_degree_centrality(self, avg_size=300):
+    def draw_degree_centrality(self, avg_size=300) -> None:
         sizes = list(self.degree_centrality().values())
         sizes = [i**1.5 for i in sizes]
         mean = statistics.mean(sizes)
         sizes = [i * avg_size / mean for i in sizes]
         self.draw(node_size=sizes)
 
-    def draw_closeness_centrality(self, avg_size=300):
+    def draw_closeness_centrality(self, avg_size=300) -> None:
         sizes = list(self.closeness_centrality().values())
         sizes = [i**2 for i in sizes]
         mean = statistics.mean(sizes)
         sizes = [i * avg_size / mean for i in sizes]
         self.draw(node_size=sizes)
 
-    def draw_betweenness_centrality(self, avg_size=300):
+    def draw_betweenness_centrality(self, avg_size=300) -> None:
         sizes = list(self.betweenness_centrality().values())
         mean = statistics.mean(sizes)
         sizes = [i * avg_size / mean for i in sizes]
         self.draw(node_size=sizes)
 
-    def get_largest_components_size(self):
+    def get_largest_components_size(self) -> int:
         return len(max(nx.connected_components(self), key=len))
 
-    def delete_random_nodes(self, n: int = 1, print_result=True):
-        G = copy.deepcopy(self)
-        rd.seed(self.seed)
-        for i in range(n):
-            node = rd.choice([i for i in nx.nodes(G)])
+    def delete_random_nodes(self, n: int = 1, print_result=True) -> Graph:
+        g = copy.deepcopy(self)
+        random.seed(self.seed)
+        for _ in range(n):
+            node = random.choice(list(nx.nodes(g)))
             if print_result:
                 print("Removed node", node, "using", "random_fault")
-            G.remove_node(node)
-        return G
+            g.remove_node(node)
+        return g
 
     def delete_nodes_attack(
         self, n: int = 1, centrality_index: str = "degree", print_result=True
-    ):
-        #:TODO mekke pause og highlighte grafen så den lyser
-        G = copy.deepcopy(self)
-        rd.seed(self.seed)
-        for i in range(n):
-            analysis = self.attackdict[centrality_index](G)
+    ) -> Graph:
+        g = copy.deepcopy(self)
+        random.seed(self.seed)
+        for _ in range(n):
+            analysis = self.attackdict[centrality_index](g)
             node = max(analysis, key=lambda key: analysis[key])
             if print_result:
                 print(
-                    "Removed node",
-                    node,
-                    "using",
-                    str(self.attackdict[centrality_index].__name__),
+                    f"Removed node {node} using "
+                    f"{self.attackdict[centrality_index].__name__}"
                 )
-            G.remove_node(node)
-        return G
+            g.remove_node(node)
+        return g
 
     def get_shortest_path(self, node1, node2):
         path = None
@@ -103,7 +102,7 @@ class Graph(nx.Graph):
             pass
         return path
 
-    def mark_nodes(self, mark_nodes):
+    def mark_nodes(self, mark_nodes) -> None:
         nodes = self.nodes()
         node_color = [
             "#1f78b4" if node not in mark_nodes else "#b82d2d"
@@ -111,7 +110,7 @@ class Graph(nx.Graph):
         ]
         self.draw(node_color=node_color)
 
-    def mark_shortest_path(self, node1, node2):
+    def mark_shortest_path(self, node1, node2) -> None:
         path = nx.shortest_path(self, node1, node2)
         edges = self.edges()
         marked_edges = [
@@ -133,7 +132,9 @@ class Graph(nx.Graph):
         ]
         self.draw(edge_color=edge_color, node_color=node_color)
 
-    def draw(self, node_color="#1f78b4", edge_color="k", node_size=300):
+    def draw(
+        self, node_color="#1f78b4", edge_color="k", node_size=300
+    ) -> None:
         plt.figure(num=None, figsize=(10, 10))
         nx.draw_kamada_kawai(
             self,

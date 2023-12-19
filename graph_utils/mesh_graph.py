@@ -2,7 +2,7 @@ from .graph import Graph, nx
 
 
 class MeshGraph(Graph):
-    def __init__(self, n, **attr):
+    def __init__(self, n, **attr) -> None:
         super().__init__(**attr)
         g = nx.complete_graph(n)
         self.add_nodes_from(g.nodes)
