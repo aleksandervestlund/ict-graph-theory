@@ -2,6 +2,6 @@ lxml==6.0.0
 requests==2.32.4
 networkx==3.5
 matplotlib==3.10.5
-notebook==7.4.4
+notebook==7.4.5
 numpy==2.3.2
 scipy==1.16.1
